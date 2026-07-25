@@ -907,6 +907,25 @@ async function compartirPresupuesto() {
     
     if (canvasFacturaEl && typeof Chart !== 'undefined') {
         const ctxFac = canvasFacturaEl.getContext("2d");
+        const textoCentroFactura = {
+            id: "textoCentroFactura",
+            afterDraw(chart) {
+                const { ctx, chartArea: { left, right, top, bottom } } = chart;
+                const centroX = (left + right) / 2;
+                const centroY = (top + bottom) / 2;
+                ctx.save();
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillStyle = "#1e293b";
+                ctx.font = "bold 20px Arial";
+                ctx.fillText(euros(ultimoPresupuesto.total), centroX, centroY - 9);
+                ctx.fillStyle = "#94a3b8";
+                ctx.font = "11px Arial";
+                ctx.fillText("TOTAL", centroX, centroY + 13);
+                ctx.restore();
+            }
+        };
+
         chartFacturaTemp = new Chart(ctxFac, {
             type: "doughnut",
             data: {
@@ -927,7 +946,8 @@ async function compartirPresupuesto() {
                 animation: false,
                 cutout: "68%",
                 plugins: { legend: { display: false } }
-            }
+            },
+            plugins: [textoCentroFactura]
         });
     }
 
