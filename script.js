@@ -926,18 +926,20 @@ async function compartirPresupuesto() {
             }
         };
 
+        const componentesGrafico = [
+            { label: "Material", valor: ultimoPresupuesto.material, color: "#76B5E8" },
+            { label: "Impresión", valor: ultimoPresupuesto.impresion + ultimoPresupuesto.luz, color: "#2A66B2" },
+            { label: "Diseño", valor: ultimoPresupuesto.diseno, color: "#174A86" },
+            { label: "Preparación", valor: ultimoPresupuesto.preparacion, color: "#22A447" }
+        ].filter(c => c.valor > 0);
+
         chartFacturaTemp = new Chart(ctxFac, {
             type: "doughnut",
             data: {
-                labels: ["Material", "Impresión", "Diseño", "Preparación"],
+                labels: componentesGrafico.map(c => c.label),
                 datasets: [{
-                    data: [
-                        ultimoPresupuesto.material, 
-                        (ultimoPresupuesto.impresion + ultimoPresupuesto.luz), 
-                        ultimoPresupuesto.diseno, 
-                        ultimoPresupuesto.preparacion
-                    ],
-                    backgroundColor: ["#76B5E8", "#2A66B2", "#174A86", "#22A447"],
+                    data: componentesGrafico.map(c => c.valor),
+                    backgroundColor: componentesGrafico.map(c => c.color),
                     borderWidth: 0
                 }]
             },
@@ -949,6 +951,14 @@ async function compartirPresupuesto() {
             },
             plugins: [textoCentroFactura]
         });
+
+        const leyendaEl = document.getElementById("facLeyendaPorcentajes");
+        if (leyendaEl) {
+            leyendaEl.innerHTML = componentesGrafico.map(c => {
+                const porcentaje = ultimoPresupuesto.total > 0 ? Math.round((c.valor / ultimoPresupuesto.total) * 100) : 0;
+                return `<div><span class="color" style="background:${c.color}"></span>${c.label} <strong>${porcentaje}%</strong></div>`;
+            }).join("");
+        }
     }
 
     try {

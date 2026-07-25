@@ -303,16 +303,41 @@ footer {
 /* Estructura para el bloque inferior del gráfico y el total */
 .factura-cuerpo-grafico {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     margin-top: 25px;
     padding-top: 15px;
     border-top: 1px solid #eee;
+    gap: 18px;
 }
 
 .grafico-box {
     text-align: center;
-    width: 45%;
+    width: 100%;
+}
+
+.factura-leyenda-porcentajes {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: center;
+    gap: 8px 20px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #334155;
+}
+
+.factura-leyenda-porcentajes div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.factura-leyenda-porcentajes .color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 .chart-title {
@@ -328,7 +353,9 @@ footer {
 }
 
 .total-box {
-    width: 50%;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
     background: #e8f8f0;
     border: 1px solid #b4e6cb;
     border-radius: 12px;
